@@ -11,7 +11,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["jeff.morgan@leandog.com"]
   gem.homepage      = "http://github.com/cheezy/page_naigation"
   gem.description   = %q{Provides basic navigation through a collection of items that use the PageObject pattern.}
-  gem.summary       = %q{Provides basic navigation through a collection of items that use the PageObject paggern.}
+  gem.summary       = %q{Provides basic navigation through a collection of items that use the PageObject pattern.}
 
   gem.rubyforge_project = "page_naigation"
 
