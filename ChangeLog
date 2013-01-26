@@ -1,2 +1,5 @@
+=== Version 0.2 / 2012-1-25
+* Fixed minor issue when module is included in module that is included in Class
+
 === Version 0.1 / 2013-1-25
 * This is the initial release of this gem
