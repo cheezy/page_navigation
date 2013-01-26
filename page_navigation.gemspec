@@ -6,14 +6,19 @@ require 'page_navigation/version'
 Gem::Specification.new do |gem|
   gem.name          = "page_navigation"
   gem.version       = PageNavigation::VERSION
+  gem.platform      = Gem::Platform::RUBY
   gem.authors       = ["Jeffrey S. Morgan"]
   gem.email         = ["jeff.morgan@leandog.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
-  gem.homepage      = ""
+  gem.homepage      = "http://github.com/cheezy/page_naigation"
+  gem.description   = %q{Provides basic navigation through a collection of items that use the PageObject pattern.}
+  gem.summary       = %q{Provides basic navigation through a collection of items that use the PageObject paggern.}
+
+  gem.rubyforge_project = "page_naigation"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
+
+
 end
