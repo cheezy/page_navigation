@@ -1,6 +1,26 @@
 require "page_navigation/version"
 require "page_navigation/routes"
 
+#
+# Implements basic navigation capabilities for a collection of classes
+# that implement a PageObject like pattern.
+#
+# In order to use these two methods you must define routes.  A route
+# is cimply an array of Class/Method calls and can contain parameters
+# that can be passed to the methods.  Here is an example:
+#
+# @example Example routes defined in env.rb
+#   MyNavigator.routes = {
+#     :default => [[PageOne,:method1], [PageTwoA,:method2], [PageThree,:method3]],
+#     :another_route => [[PageOne,:method1, "arg1"], [PageTwoB,:method2b], [PageThree,:method3]]
+#   }
+#
+# Notice the first entry of :anouther_route is passing an argument
+# to the method.
+#
+# The user must also maintain an instance variable named @current_page
+# which points to the current object in the array.
+# 
 module PageNavigation
 
   def self.included(cls)
@@ -55,6 +75,7 @@ module PageNavigation
     on(page_cls, &block)
   end
 
+  
   private
 
   def path_for(how)
@@ -79,5 +100,4 @@ module PageNavigation
   def self.included(cls)
     cls.extend PageNavigation::Routes
   end
-
 end
