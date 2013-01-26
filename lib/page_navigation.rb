@@ -1,5 +1,83 @@
 require "page_navigation/version"
+require "page_navigation/routes"
 
 module PageNavigation
-  # Your code goes here...
+
+  def self.included(cls)
+    cls.extend PageNavigation::Routes
+  end
+
+
+  #
+  # Navigate to a specific page following a predefined path.
+  #
+  # This method requires a lot of setup.  See the documentation for
+  # this module.  Once the setup is complete you can navigate to a
+  # page traversing through all other pages along the way.  It will
+  # call the method you specified in the routes for each
+  # page as it navigates.  Using the example setup defined in the
+  # documentation above you can call the method two ways:
+  #
+  # @example
+  #   page.navigate_to(PageThree)  # will use the default path
+  #   page.navigate_to(PageThree, :using => :another_route)
+  #
+  # @param [PageObject]  a class that implements the PageObject pattern.
+  # @param [Hash] a hash that contains an element with the key
+  # :using.  This will be used to lookup the route.  It has a
+  # default value of :default.
+  # @param [block]  an optional block to be called
+  # @return [PageObject] the page you are navigating to
+  #
+  def navigate_to(page_cls, how = {:using => :default}, &block)
+    path = path_for how
+    to_index = find_index_for(path, page_cls)-1
+    navigate_through_pages(path[0..to_index])
+    on(page_cls, &block)
+  end
+
+  #
+  # Same as navigate_to except it will start at the @current_page
+  # instead the beginning of the path.
+  #
+  # @param [PageObject]  a class that implements the PageObject pattern.
+  # @param [Hash] a hash that contains an element with the key
+  # :using.  This will be used to lookup the route.  It has a
+  # default value of :default.
+  # @param [block]  an optional block to be called
+  # @return [PageObject] the page you are navigating to
+  #
+  def continue_navigation_to(page_cls, how = {:using => :default}, &block)
+    path = path_for how
+    from_index = find_index_for(path, @current_page.class)+1
+    to_index = find_index_for(path, page_cls)-1
+    navigate_through_pages(path[from_index..to_index])
+    on(page_cls, &block)
+  end
+
+  private
+
+  def path_for(how)
+    path = self.class.routes[how[:using]]
+    fail("PageFactory route :#{how[:using].to_s} not found") unless path
+    path
+  end
+  
+  def navigate_through_pages(pages)
+    pages.each do |cls, method, *args|
+      page = on(cls)
+      fail("Navigation method not specified on #{cls}.") unless page.respond_to? method
+      page.send method unless args
+      page.send method, *args if args
+    end
+  end
+
+  def find_index_for(path, item)
+    path.find_index { |each| each[0] == item}
+  end
+
+  def self.included(cls)
+    cls.extend PageNavigation::Routes
+  end
+
 end
