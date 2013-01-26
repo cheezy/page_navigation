@@ -25,8 +25,12 @@ module PageNavigation
 
   def self.included(cls)
     cls.extend PageNavigation::Routes
+    @cls = cls
   end
 
+  def self.cls
+    @cls
+  end
 
   #
   # Navigate to a specific page following a predefined path.
@@ -79,7 +83,7 @@ module PageNavigation
   private
 
   def path_for(how)
-    path = self.class.routes[how[:using]]
+    path = PageNavigation.cls.routes[how[:using]]
     fail("PageFactory route :#{how[:using].to_s} not found") unless path
     path
   end
@@ -97,7 +101,4 @@ module PageNavigation
     path.find_index { |each| each[0] == item}
   end
 
-  def self.included(cls)
-    cls.extend PageNavigation::Routes
-  end
 end
