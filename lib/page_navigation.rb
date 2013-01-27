@@ -73,9 +73,10 @@ module PageNavigation
   #
   def continue_navigation_to(page_cls, how = {:using => :default}, &block)
     path = path_for how
-    from_index = find_index_for(path, @current_page.class)+1
+    from_index = find_index_for(path, @current_page.class)
     to_index = find_index_for(path, page_cls)-1
-    navigate_through_pages(path[from_index..to_index])
+    navigate_through_pages([path[from_index]]) if from_index == to_index
+    navigate_through_pages(path[from_index..to_index]) unless from_index == to_index
     on(page_cls, &block)
   end
 

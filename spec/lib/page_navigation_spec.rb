@@ -78,12 +78,29 @@ describe PageNavigation do
                    [AnotherPage, :b_method],
                    [YetAnotherPage, :c_method]]
     }
-    fake_page = double('a_page')
+    @navigator.current_page = FactoryTestPage.new
+    f_page = FactoryTestPage.new
+    FactoryTestPage.should_receive(:new).and_return(f_page)
+    f_page.should_receive(:respond_to?).with(:a_method).and_return(true)
+    f_page.should_receive(:a_method)
+    a_page = AnotherPage.new
+    AnotherPage.should_receive(:new).and_return(a_page)
+    a_page.should_receive(:respond_to?).with(:b_method).and_return(true)
+    a_page.should_receive(:b_method)
+    @navigator.continue_navigation_to(YetAnotherPage).class.should == YetAnotherPage
+  end
+
+  it "should know how to continue routng from a location that is one page from the end" do
+    TestNavigator.routes = {
+      :default => [[FactoryTestPage, :a_method],
+                   [AnotherPage, :b_method],
+                   [YetAnotherPage, :c_method]]
+    }
+    @navigator.current_page = AnotherPage.new
+    fake_page = AnotherPage.new
     AnotherPage.should_receive(:new).and_return(fake_page)
     fake_page.should_receive(:respond_to?).with(:b_method).and_return(true)
     fake_page.should_receive(:b_method)
-    @navigator.current_page = FactoryTestPage.new
-    FactoryTestPage.should_not_receive(:new)
     @navigator.continue_navigation_to(YetAnotherPage).class.should == YetAnotherPage
   end
 end
