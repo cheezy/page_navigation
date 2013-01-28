@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
   gem.platform      = Gem::Platform::RUBY
   gem.authors       = ["Jeffrey S. Morgan"]
   gem.email         = ["jeff.morgan@leandog.com"]
-  gem.homepage      = "http://github.com/cheezy/page_naigation"
+  gem.homepage      = "http://github.com/cheezy/page_navigation"
   gem.description   = %q{Provides basic navigation through a collection of items that use the PageObject pattern.}
   gem.summary       = %q{Provides basic navigation through a collection of items that use the PageObject pattern.}
 
