@@ -57,7 +57,7 @@ module PageNavigation
     path = path_for how
     to_index = find_index_for(path, page_cls)-1
     if to_index == -1
-      reutrn on(page_cls, &block)
+      return on(page_cls, &block)
     else
       navigate_through_pages(path[0..to_index])
     end
