@@ -80,9 +80,6 @@ describe PageNavigation do
     }
     @navigator.current_page = FactoryTestPage.new
     f_page = FactoryTestPage.new
-    FactoryTestPage.should_receive(:new).and_return(f_page)
-    f_page.should_receive(:respond_to?).with(:a_method).and_return(true)
-    f_page.should_receive(:a_method)
     a_page = AnotherPage.new
     AnotherPage.should_receive(:new).and_return(a_page)
     a_page.should_receive(:respond_to?).with(:b_method).and_return(true)
@@ -96,7 +93,7 @@ describe PageNavigation do
                    [AnotherPage, :b_method],
                    [YetAnotherPage, :c_method]]
     }
-    @navigator.current_page = AnotherPage.new
+    @navigator.current_page = FactoryTestPage.new
     fake_page = AnotherPage.new
     AnotherPage.should_receive(:new).and_return(fake_page)
     fake_page.should_receive(:respond_to?).with(:b_method).and_return(true)

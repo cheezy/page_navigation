@@ -1,3 +1,6 @@
+=== Version 0.5
+* Fixed with continue_navigation_to not picking the page after @current_page
+
 === Version 0.4 / 2013-1-28
 * Fixed typo in homepage entry for gemspec
 
