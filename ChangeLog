@@ -1,3 +1,6 @@
+=== Version 0.7
+* Added route_data hash to map a route to a specific DataMagic file
+
 === Version 0.6 / 2013-2-19
 * Fixed continue_navigation_to to always start with @current_page
 

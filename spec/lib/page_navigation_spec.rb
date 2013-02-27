@@ -27,6 +27,7 @@ end
 describe PageNavigation do
   before(:each) do
     @navigator = TestNavigator.new
+    DataMagic.stub(:load)
   end
 
   it "should raise an error when you do not provide a default route" do
@@ -39,12 +40,28 @@ describe PageNavigation do
     TestNavigator.routes[:default].should == routes
   end
 
+  it "should store route data" do
+    TestNavigator.route_data = {:default => :blah}
+    TestNavigator.route_data.should == {:default => :blah}
+  end
+
   it "should navigate to a page calling the default methods" do
     pages = [[FactoryTestPage, :a_method], [AnotherPage, :b_method]]
     TestNavigator.routes = {:default => pages}
     fake_page = double('a_page')
     FactoryTestPage.should_receive(:new).and_return(fake_page)
     fake_page.should_receive(:a_method)
+    @navigator.navigate_to(AnotherPage).class.should == AnotherPage
+  end
+
+  it "should load the DataMagic file when specified" do
+    pages = [[FactoryTestPage, :a_method], [AnotherPage, :b_method]]
+    TestNavigator.routes = {:default => pages}
+    TestNavigator.route_data = {:default => :dm_file}
+    fake_page = double('a_page')
+    FactoryTestPage.should_receive(:new).and_return(fake_page)
+    fake_page.should_receive(:a_method)
+    DataMagic.should_receive(:load).with('dm_file.yml')
     @navigator.navigate_to(AnotherPage).class.should == AnotherPage
   end
 

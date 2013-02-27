@@ -1,5 +1,6 @@
 require "page_navigation/version"
 require "page_navigation/routes"
+require 'data_magic'
 
 #
 # Implements basic navigation capabilities for a collection of classes
@@ -93,6 +94,10 @@ module PageNavigation
   def path_for(how)
     path = PageNavigation.cls.routes[how[:using]]
     fail("PageFactory route :#{how[:using].to_s} not found") unless path
+    if PageNavigation.cls.route_data
+      file_to_load = PageNavigation.cls.route_data[how[:using]]
+      DataMagic.load "#{file_to_load.to_s}.yml" if file_to_load
+    end
     path
   end
   
