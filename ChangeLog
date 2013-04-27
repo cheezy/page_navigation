@@ -1,3 +1,6 @@
+=== Version 0.8 / 2013-4026
+* Added navigate_all method to navigate an entire route including the last page
+
 === Version 0.7 / 2013-2-27
 * Added route_data hash to map a route to a specific DataMagic file
 

@@ -88,6 +88,25 @@ module PageNavigation
     on(page_cls, &block)
   end
 
+  #
+  # Navigate through a complete route.
+  #
+  # This method will navigate an entire route executing all of the
+  # methods.  Since it completes the route it does not return any
+  # pages and it does not accept a block.
+  #
+  # @example
+  #   page.navigate_all  # will use the default path
+  #   page.navigate_all(:using => :another_route)
+  #
+  # @param [Hash] a hash that contains an element with the key
+  # :using.  This will be used to lookup the route.  It has a
+  # default value of :default.
+  #
+  def navigate_all(how = {:using => :default})
+    path = path_for how
+    navigate_through_pages(path[0..-1])
+  end
   
   private
 

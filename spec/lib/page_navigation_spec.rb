@@ -124,4 +124,25 @@ describe PageNavigation do
     a_page.should_receive(:b_method)
     @navigator.continue_navigation_to(YetAnotherPage).class.should == YetAnotherPage
   end
+
+  it "should know how to navigate an entire route including the last page" do
+    TestNavigator.routes = {
+      :default => [[FactoryTestPage, :a_method],
+                   [AnotherPage, :b_method],
+                   [YetAnotherPage, :c_method]]
+    }
+    f_page = FactoryTestPage.new
+    a_page = AnotherPage.new
+    y_page = YetAnotherPage.new
+    FactoryTestPage.should_receive(:new).and_return(f_page)
+    f_page.should_receive(:respond_to?).with(:a_method).and_return(true)
+    f_page.should_receive(:a_method)
+    AnotherPage.should_receive(:new).and_return(a_page)
+    a_page.should_receive(:respond_to?).with(:b_method).and_return(true)
+    a_page.should_receive(:b_method)
+    YetAnotherPage.should_receive(:new).and_return(y_page)
+    y_page.should_receive(:respond_to?).with(:c_method).and_return(true)
+    y_page.should_receive(:c_method)
+    @navigator.navigate_all
+  end
 end
