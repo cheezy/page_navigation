@@ -55,12 +55,14 @@ module PageNavigation
   # @return [PageObject] the page you are navigating to
   #
   def navigate_to(page_cls, how = {:using => :default}, &block)
+    how[:using] = :default unless how[:using]
     path = path_for how
     to_index = find_index_for(path, page_cls)-1
     if to_index == -1
       return on(page_cls, &block)
     else
-      navigate_through_pages(path[0..to_index])
+      start = how[:from] ? path.find_index { |entry| entry[0] == how[:from] } : 0
+      navigate_through_pages(path[start..to_index])
     end
     on(page_cls, &block)
   end

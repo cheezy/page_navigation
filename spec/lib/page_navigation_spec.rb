@@ -145,4 +145,19 @@ describe PageNavigation do
     y_page.should_receive(:c_method)
     @navigator.navigate_all
   end
+
+  it "should be able to start in the middle of a route and proceed" do
+    TestNavigator.routes = {
+      :default => [[FactoryTestPage, :a_method],
+                   [AnotherPage, :b_method],
+                   [YetAnotherPage, :c_method]]
+    }
+    a_page = AnotherPage.new
+    y_page = YetAnotherPage.new
+    AnotherPage.should_receive(:new).and_return(a_page)
+    a_page.should_receive(:respond_to?).with(:b_method).and_return(true)
+    a_page.should_receive(:b_method)
+    YetAnotherPage.should_receive(:new).and_return(y_page)
+    @navigator.navigate_to(YetAnotherPage, :from => AnotherPage)
+  end
 end
