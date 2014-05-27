@@ -7,7 +7,7 @@ require 'data_magic'
 # that implement a PageObject like pattern.
 #
 # In order to use these two methods you must define routes.  A route
-# is cimply an array of Class/Method calls and can contain parameters
+# is simply an array of Class/Method calls and can contain parameters
 # that can be passed to the methods.  Here is an example:
 #
 # @example Example routes defined in env.rb
