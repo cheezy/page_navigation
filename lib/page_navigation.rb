@@ -47,22 +47,24 @@ module PageNavigation
   #   page.navigate_to(PageThree)  # will use the default path
   #   page.navigate_to(PageThree, :using => :another_route)
   #
-  # @param [PageObject]  a class that implements the PageObject pattern.
-  # @param [Hash] a hash that contains an element with the key
+  # @param [PageObject] page_cls a class that implements the PageObject pattern.
+  # @param [Hash] how a hash that contains two elements. One with the key
   # :using.  This will be used to lookup the route.  It has a
-  # default value of :default.
-  # @param [block]  an optional block to be called
+  # default value of :default. The other is with the key :visit. This specifies
+  # whether to explicitly visit the first page. It has a default value of false.
+  # @param [block] block an optional block to be called
   # @return [PageObject] the page you are navigating to
   #
-  def navigate_to(page_cls, how = {:using => :default}, &block)
+  def navigate_to(page_cls, how = {:using => :default, :visit => false}, &block)
     how[:using] = :default unless how[:using]
+    how[:visit] = false unless how[:visit]
     path = path_for how
     to_index = find_index_for(path, page_cls)-1
     if to_index == -1
       return on(page_cls, &block)
     else
       start = how[:from] ? path.find_index { |entry| entry[0] == how[:from] } : 0
-      navigate_through_pages(path[start..to_index])
+      navigate_through_pages(path[start..to_index], how[:visit])
     end
     on(page_cls, &block)
   end
@@ -71,11 +73,11 @@ module PageNavigation
   # Same as navigate_to except it will start at the @current_page
   # instead the beginning of the path.
   #
-  # @param [PageObject]  a class that implements the PageObject pattern.
-  # @param [Hash] a hash that contains an element with the key
+  # @param [PageObject] page_cls a class that implements the PageObject pattern.
+  # @param [Hash] how a hash that contains an element with the key
   # :using.  This will be used to lookup the route.  It has a
   # default value of :default.
-  # @param [block]  an optional block to be called
+  # @param [block] block an optional block to be called
   # @return [PageObject] the page you are navigating to
   #
   def continue_navigation_to(page_cls, how = {:using => :default}, &block)
@@ -83,9 +85,9 @@ module PageNavigation
     from_index = find_index_for(path, @current_page.class)
     to_index = find_index_for(path, page_cls)-1
     if from_index == to_index
-      navigate_through_pages([path[from_index]]) 
+      navigate_through_pages([path[from_index]], false)
     else
-      navigate_through_pages(path[from_index..to_index]) 
+      navigate_through_pages(path[from_index..to_index], false)
     end
     on(page_cls, &block)
   end
@@ -101,13 +103,14 @@ module PageNavigation
   #   page.navigate_all  # will use the default path
   #   page.navigate_all(:using => :another_route)
   #
-  # @param [Hash] a hash that contains an element with the key
+  # @param [Hash] how a hash that contains two elements. One with the key
   # :using.  This will be used to lookup the route.  It has a
-  # default value of :default.
+  # default value of :default. The other is with the key :visit. This specifies
+  # whether to explicitly visit the first page. It has a default value of false.
   #
-  def navigate_all(how = {:using => :default})
+  def navigate_all(how = {:using => :default, :visit => false})
     path = path_for how
-    navigate_through_pages(path[0..-1])
+    navigate_through_pages(path[0..-1], how[:visit])
   end
   
   private
@@ -122,9 +125,14 @@ module PageNavigation
     path
   end
   
-  def navigate_through_pages(pages)
+  def navigate_through_pages(pages, visit)
     pages.each do |cls, method, *args|
-      page = on(cls)
+      if visit
+        page = visit(cls)
+        visit = false # visit once, for just the first page
+      else
+        page = on(cls)
+      end
       fail("Navigation method '#{method}' not defined on #{cls}.") unless page.respond_to? method
       page.send method unless args
       page.send method, *args if args

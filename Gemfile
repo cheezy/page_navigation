@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
 gem 'rake'
 gem 'rb-fsevent', :require => false if RUBY_PLATFORM =~ /darwin/i
