@@ -1,3 +1,3 @@
 module PageNavigation
-  VERSION = "0.9"
+  VERSION = '0.11'
 end
