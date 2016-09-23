@@ -127,12 +127,8 @@ module PageNavigation
   
   def navigate_through_pages(pages, visit)
     pages.each do |cls, method, *args|
-      if visit
-        page = visit(cls)
-        visit = false # visit once, for just the first page
-      else
-        page = on(cls)
-      end
+      page = visit ? visit(cls) : on(cls)
+      visit = false # visit once, for just the first page
       fail("Navigation method '#{method}' not defined on #{cls}.") unless page.respond_to? method
       page.send method unless args
       page.send method, *args if args
