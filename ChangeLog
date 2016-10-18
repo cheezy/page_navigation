@@ -1,3 +1,6 @@
+=== Version 0.11
+* Added optional 'visit' argument to navigate_to and navigate_all to visit first page
+
 === Version 0.10
 * Improved error message when navigation methods are undefined
 
