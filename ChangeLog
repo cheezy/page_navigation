@@ -1,8 +1,6 @@
-=== Version 0.11
-* Added optional 'visit' argument to navigate_to and navigate_all to visit first page
-
 === Version 0.10
 * Improved error message when navigation methods are undefined
+* Added optional 'visit' argument to navigate_to and navigate_all to visit first page (Thanks sciros)
 
 === Version 0.9 / 2013-05-03
 * Added :from entry to navigate_to method call
